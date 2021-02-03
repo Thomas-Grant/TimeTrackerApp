@@ -9,6 +9,8 @@ abstract class AuthBase {
   Future<User> signInAnonymously();
   Future<User> signInWithGoogle();
   Future<User> signInWithFacebook();
+  Future<User> signInWithEmailAndPassword(String email, String password);
+  Future<User> createUserWithEmailAndPassword(String email, String password);
   Future<void> signOut();
 }
 
@@ -28,24 +30,45 @@ class Auth implements AuthBase {
   }
 
   @override
+  Future<User> signInWithEmailAndPassword(String email, String password) async {
+    final userCredential =
+        await _firebaseAuth.signInWithCredential(EmailAuthProvider.credential(
+      email: email,
+      password: password,
+    ));
+    return userCredential.user;
+  }
+
+  @override
+  Future<User> createUserWithEmailAndPassword(
+      String email, String password) async {
+    final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    return userCredential.user;
+  }
+
+  @override
   Future<User> signInWithGoogle() async {
     final googleSignIn = GoogleSignIn();
     final googleUser = await googleSignIn.signIn();
-    if (googleUser != null){
+    if (googleUser != null) {
       final googleAuth = await googleUser.authentication;
-      if (googleAuth.idToken != null){
-        final userCredential = await _firebaseAuth.signInWithCredential(GoogleAuthProvider.credential(
+      if (googleAuth.idToken != null) {
+        final userCredential = await _firebaseAuth
+            .signInWithCredential(GoogleAuthProvider.credential(
           idToken: googleAuth.idToken,
           accessToken: googleAuth.accessToken,
         ));
         return userCredential.user;
-      } else{
+      } else {
         throw FirebaseAuthException(
           code: 'ERROR_MISSING_GOOGLE_ID_TOKEN',
           message: 'Missing Google ID Token',
         );
       }
-    } else{
+    } else {
       throw FirebaseAuthException(
         code: 'ERROR_ABORTED_BY_USER',
         message: 'Sign in aborted by user',
@@ -60,7 +83,7 @@ class Auth implements AuthBase {
       FacebookPermission.publicProfile,
       FacebookPermission.email,
     ]);
-    switch (response.status){
+    switch (response.status) {
       case FacebookLoginStatus.Success:
         final accessToken = response.accessToken;
         final userCredential = await _firebaseAuth.signInWithCredential(
