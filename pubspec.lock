@@ -42,7 +42,7 @@ packages:
       name: build
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.1"
+    version: "1.6.2"
   built_collection:
     dependency: transitive
     description:
@@ -112,7 +112,7 @@ packages:
       name: code_builder
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.5.0"
+    version: "3.6.0"
   collection:
     dependency: transitive
     description:
@@ -288,7 +288,7 @@ packages:
       name: list_ext
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.14"
+    version: "0.1.15"
   logging:
     dependency: transitive
     description:
@@ -405,7 +405,7 @@ packages:
       name: source_gen
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.8"
+    version: "0.9.10+2"
   source_span:
     dependency: transitive
     description:
